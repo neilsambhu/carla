@@ -32,7 +32,11 @@ from numpy import random
 def get_actor_blueprints(world, filter, generation):
     bps = world.get_blueprint_library().filter(filter)
     # 3/25/2023 7:16:24 PM: print vehicles: start
-    print(bps)
+    #print(f'type(bps): {type(bps)}')
+    #for vehicle in bps:
+    #    if vehicle.id=="vehicle.ford.ambulance":
+    #        print(vehicle)
+    #        bps = vehicle
     # 3/25/2023 7:16:24 PM: print vehicles: end
     if generation.lower() == "all":
         return bps
