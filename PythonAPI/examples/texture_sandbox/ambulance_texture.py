@@ -47,12 +47,17 @@ vehicle_bp = blueprint_library.find('vehicle.ford.ambulance')
 
 # Create a new material with the desired texture
 texture_file = 'colorful_cat.jpeg'
-texture = carla.Texture(carla.RawTexture(texture_file, 'RGBA', False, False))
+with open(texture_file, 'rb') as f:
+	image = f.read()
+texture = carla.Texture('AmbulanceTexture',image)
+#texture = carla.RawTexture(texture_file, 'RGBA', False, False)
 material = carla.Material('AmbulanceTexture')
-material.set_texture(0, texture)
+#material.set_texture(0, texture)
+material.set_texture('BaseColor', texture)
+vehicle_bp.set_attribute('material.0', material)
 
 # Add the new material to the ambulance blueprint
-vehicle_bp.set_attribute('materials', '0', material)
+#vehicle_bp.set_attribute('materials', '0', material)
 
 # Spawn the ambulance in the simulator
 spawn_point = carla.Transform(carla.Location(x=50, y=0, z=2), carla.Rotation(yaw=180))
