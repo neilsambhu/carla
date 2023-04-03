@@ -48,11 +48,13 @@ vehicle_bp = blueprint_library.find('vehicle.ford.ambulance')
 # Create a new material with the desired texture
 texture_file = 'colorful_cat.jpeg'
 with open(texture_file, 'rb') as f:
-	image = f.read()
-texture = carla.Texture('AmbulanceTexture',image)
-#texture = carla.RawTexture(texture_file, 'RGBA', False, False)
-material = carla.Material('AmbulanceTexture')
-#material.set_texture(0, texture)
+	image_data = f.read()
+height = 512
+width = 512
+pixel_format = 'RGBA'
+image = carla.Image(image_data, height, width, pixel_format)
+texture = carla.Texture('AmbulanceTexture', raw_data)
+material = carla.Material('AmbulanceMaterial')
 material.set_texture('BaseColor', texture)
 vehicle_bp.set_attribute('material.0', material)
 
