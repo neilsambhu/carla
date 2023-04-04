@@ -52,8 +52,9 @@ with open(texture_file, 'rb') as f:
 height = 512
 width = 512
 pixel_format = 'RGBA'
-image = carla.Image(image_data, height, width, pixel_format)
-texture = carla.Texture('AmbulanceTexture', raw_data)
+#image = carla.Image(image_data, height, width, pixel_format)
+raw_texture = carla.RawTexture(texture_data, height, width, pixel_format)
+texture = carla.Texture('AmbulanceTexture', raw_texture)
 material = carla.Material('AmbulanceMaterial')
 material.set_texture('BaseColor', texture)
 vehicle_bp.set_attribute('material.0', material)
