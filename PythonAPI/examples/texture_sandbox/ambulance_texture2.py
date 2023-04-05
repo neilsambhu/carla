@@ -33,25 +33,18 @@ spawn_points = world.get_map().get_spawn_points()
 for i in range(10):
     spawn_point = spawn_points[i]
     ambulance_actor = world.spawn_actor(ambulance_bp, spawn_point)
+    ambulance_actor.set_simulate_physics(False)
     ambulance_actor.set_attribute('role_name', 'ambulance{}'.format(i))
 
-# Modify the texture of the first ambulance
+# Get the pre-existing ambulance vehicle
 ambulance_actors = world.get_actors().filter('vehicle.ford.ambulance')
-ambulance_actor = None
-for actor in ambulance_actors:
-    if actor.attributes['role_name'] == 'hero':
-        ambulance_actor = actor
+ambulance_actor = ambulance_actors[0]
 
-# Set the texture of the ambulance to the new texture
+'''# Modify the texture of the pre-existing ambulance vehicle
 material = ambulance_actor.get_material(0)
 texture_package = "/Game/MyAmbulance"
 asset_tools = world.get_asset_tools()
 asset_tools.import_asset(texture_path, texture_package)
 texture_name = "Texture2D'/Game/MyAmbulance/MyAmbulanceTexture.MyAmbulanceTexture'"
 texture = blueprint_library.find(texture_name)
-material.set_texture_param("Texture", texture)
-
-# Wait for a few seconds and destroy the actor
-import time
-time.sleep(5)
-ambulance_actor.destroy()
+material.set_texture_param("Texture", texture)'''
