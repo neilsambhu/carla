@@ -16,37 +16,34 @@ server_process = subprocess.Popen(cmd, shell=True, preexec_fn=os.setsid)
 time.sleep(10)
 # 4/1/2023 7:57:17 PM: launch simulator: end
 
-# Set the path to the texture file
-texture_path = "colorful_cat.jpeg"
+from PIL import Image
+
+image_path = 'colorful_cat.jpeg'
+image = Image.open(image_path)
 
 import carla
 
-# connect to the CARLA simulator
+
 client = carla.Client('localhost', 2000)
-client.set_timeout(10.0)
 world = client.get_world()
 
-# get the blueprint for the ambulance vehicle
 blueprint_library = world.get_blueprint_library()
-ambulance_bp = blueprint_library.find('vehicle.ford.ambulance')
 
-# spawn the ambulance vehicle
-spawn_point = carla.Transform(carla.Location(x=50.0, y=0.0, z=2.0), carla.Rotation(yaw=0.0))
+# Get the ambulance blueprint
+ambulance_bp = blueprint_library.filter('vehicle.audi.etron')[0]
+
+# Create a new material using the image texture
+material = carla.Material('MyMaterial')
+material.set_texture(0, image_path)
+
+# Set the material to the ambulance blueprint
+ambulance_bp.set_attribute('color', '0,0,0')
+ambulance_bp.set_attribute('material', material.id)
+
+spawn_point = carla.Transform(carla.Location(x=50, y=50, z=2))
+
 ambulance = world.spawn_actor(ambulance_bp, spawn_point)
 
-# get the material from the ambulance blueprint and create a new one with the input image as its texture
-texture_path = os.path.join(os.getcwd(), 'colorful_cat.jpeg')
-with open(texture_path, 'rb') as f:
-    texture_data = f.read()
+mesh = ambulance.get_mesh()
+mesh.set_material(0, material)
 
-material = ambulance_bp.get_attribute('color').recommended_values[0].as_material()
-material.set_texture(0, carla.Texture('MyTexture', texture_data))
-
-# apply the new material to the ambulance
-ambulance.set_material_slot(0, material)
-
-# wait for some time to see the result
-world.wait_for_tick()
-
-# destroy the ambulance vehicle
-ambulance.destroy()
