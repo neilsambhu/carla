@@ -16,47 +16,26 @@ server_process = subprocess.Popen(cmd, shell=True, preexec_fn=os.setsid)
 time.sleep(10)
 # 4/1/2023 7:57:17 PM: launch simulator: end
 
-import carla.libcarla as libcarla
-from PIL import Image
-
-# Load input image
-image_path = "colorful_cat.jpeg"
-image = Image.open(image_path)
-
-# Create new texture for vehicles
-#texture = carla.Texture("CustomTexture", image.tobytes())
-
-# create a connection to the CARLA server
+# Connect to the CARLA simulator
 client = carla.Client('localhost', 2000)
 client.set_timeout(10.0)
 
-# get the world object from the server
+# Get the world object
 world = client.get_world()
 
-# get the blueprint library
+# Define the blueprint of the vehicle you want to spawn
 blueprint_library = world.get_blueprint_library()
+vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
 
-# get the blueprint for a white car
-white_car_bp = blueprint_library.filter('vehicle.*')[0]
+# Define the spawn transform for the vehicle
+spawn_point = carla.Transform(carla.Location(x=10, y=10, z=0), carla.Rotation())
 
-# set the color of the car to white
-white_car_bp.set_attribute('color', '255,255,255')
+# Spawn the vehicle
+vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 
-# set the spawn location of the first car
-spawn_point = carla.Transform(carla.Location(x=50.0, y=50.0, z=2.0))
+# Wait for a few seconds to let the vehicle spawn properly
+world.wait_for_tick()
 
-# spawn 10 white cars at different locations in the world
-for i in range(10):
-    # try to spawn the car at the current location
-    try:
-        white_car = world.spawn_actor(white_car_bp, spawn_point)
-    # if spawn fails, move the spawn location and try again
-    except RuntimeError:
-        spawn_point.location.x += 10.0
-        spawn_point.location.y += 10.0
-        white_car = world.spawn_actor(white_car_bp, spawn_point)
-    
-    # move the spawn location for the next car
-    spawn_point.location.x += 50.0
-    spawn_point.location.y += 50.0
-time.sleep(600)
+# Do something with the vehicle
+print(f'Spawned vehicle {vehicle.id}')
+
