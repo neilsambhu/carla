@@ -21,13 +21,13 @@ client = carla.Client('localhost', 2000)
 client.set_timeout(10.0)
 
 # Get the world object
-world = client.get_world()
+# world = client.get_world()
 # Load layered map for Town 01 with minimum layout plus buildings and parked vehicles
-# world = client.load_world('Town01_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
+world = client.load_world('Town01_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
 # world = client.load_world('Town04_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
-#world = client.load_world('Town10HD_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
+# world = client.load_world('Town10HD_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
 # Toggle all buildings off
-world.unload_map_layer(carla.MapLayer.Buildings)
+# world.unload_map_layer(carla.MapLayer.Buildings)
 # world.unload_map_layer(carla.MapLayer.All)
 # world.unload_map_layer(carla.MapLayer.Buildings)
 # world.unload_map_layer(carla.MapLayer.Decals)
