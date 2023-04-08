@@ -23,8 +23,8 @@ client.set_timeout(10.0)
 # Get the world object
 # world = client.get_world()
 # Load layered map for Town 01 with minimum layout plus buildings and parked vehicles
-world = client.load_world('Town01_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
-# world = client.load_world('Town04_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
+# world = client.load_world('Town01_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
+world = client.load_world('Town04_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
 # world = client.load_world('Town10HD_Opt', carla.MapLayer.Buildings | carla.MapLayer.ParkedVehicles)
 # Toggle all buildings off
 # world.unload_map_layer(carla.MapLayer.Buildings)
@@ -42,22 +42,30 @@ world = client.load_world('Town01_Opt', carla.MapLayer.Buildings | carla.MapLaye
 # manual control
 # manual_control = subprocess.Popen('python manual_control.py')
 # manual_control.wait()
-time.sleep(600)
+spawn_points = world.get_map().get_spawn_points()
 
 # Define the blueprint of the vehicle you want to spawn
 blueprint_library = world.get_blueprint_library()
-vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
+# vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
+vehicle_bp = blueprint_library.find('vehicle.ford.ambulance')
 
-# Define the spawn transform for the vehicle
-#spawn_point = carla.Transform(carla.Location(x=-115, y=42.6, z=0), carla.Rotation())
-spawn_point = carla.Transform(carla.Location(x=42.6, y=-115, z=0), carla.Rotation())
+# Set the texture color
+color_attr = vehicle_bp.get_attribute('color')
+color = color_attr.as_color()
+texture_id = world.get_texture_id('Color', np.array([color.r, color.g, color.b, 255]))
+color_attr.set(carla.Color(255, 0, 0))  # Set the color to red
+
+# Get the texture color
+texture_color = world.get_texture_color(texture_id)
+print('Texture color:', texture_color)
 
 # Spawn the vehicle
-vehicle = world.spawn_actor(vehicle_bp, spawn_point)
+# vehicle = world.spawn_actor(vehicle_bp, spawn_point)
+for i, spawn_point in enumerate(spawn_points[0:100]):
+    vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 
-# Wait for a few seconds to let the vehicle spawn properly
-world.wait_for_tick()
+    # Wait for a few seconds to let the vehicle spawn properly
+    world.wait_for_tick()
 
-# Do something with the vehicle
-print(f'Spawned vehicle {vehicle.id}')
-
+    # Do something with the vehicle
+    print(f'Spawned vehicle {vehicle.id}')
