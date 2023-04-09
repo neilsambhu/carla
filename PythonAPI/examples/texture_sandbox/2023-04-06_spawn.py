@@ -60,8 +60,35 @@ for i, spawn_point in enumerate(spawn_points[0:100]):
     # Do something with the vehicle
     print(f'Spawned vehicle {vehicle.id}')
 
-print(list(world.get_names_of_all_objects()))
+all_objects = list(world.get_names_of_all_objects())
+ambulances = [k for k in all_objects if 'BP_Ambulance' in k]
+# print(filter_objects)
+# Load image texture
+from PIL import Image
+# Load the modified texture
+image = Image.open('colorful_cat.jpeg')
+height = image.size[1]
+width = image.size[0]
 
+# Instantiate a carla.TextureColor object and populate
+# the pixels with data from the modified image
+texture = carla.TextureColor(width ,height)
+for x in range(0,width):
+    for y in range(0,height):
+        color = image.getpixel((x,y))
+        r = int(color[0])
+        g = int(color[1])
+        b = int(color[2])
+        a = 255
+        texture.set(x, y, carla.Color(r,g,b,a))
+
+# # Apply texture to ambulances
+# for ambulance in ambulances:
+    # world.apply_color_texture_to_object(ambulance, carla.MaterialParameter.Diffuse, texture)
+# Apply texture to all objects
+from tqdm import tqdm
+for my_object in tqdm(all_objects):
+    world.apply_color_texture_to_object(my_object, carla.MaterialParameter.Diffuse, texture)
 
 # # Retrieve the first vehicle in the world
 # vehicle_list = world.get_actors().filter('vehicle.*')
