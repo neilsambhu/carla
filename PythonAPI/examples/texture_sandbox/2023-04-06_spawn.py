@@ -49,16 +49,6 @@ blueprint_library = world.get_blueprint_library()
 # vehicle_bp = blueprint_library.find('vehicle.tesla.model3')
 vehicle_bp = blueprint_library.find('vehicle.ford.ambulance')
 
-# Set the texture color
-color_attr = vehicle_bp.get_attribute('color')
-color = color_attr.as_color()
-texture_id = world.get_texture_id('Color', np.array([color.r, color.g, color.b, 255]))
-color_attr.set(carla.Color(255, 0, 0))  # Set the color to red
-
-# Get the texture color
-texture_color = world.get_texture_color(texture_id)
-print('Texture color:', texture_color)
-
 # Spawn the vehicle
 # vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 for i, spawn_point in enumerate(spawn_points[0:100]):
@@ -69,3 +59,16 @@ for i, spawn_point in enumerate(spawn_points[0:100]):
 
     # Do something with the vehicle
     print(f'Spawned vehicle {vehicle.id}')
+
+print(list(world.get_names_of_all_objects()))
+
+
+# # Retrieve the first vehicle in the world
+# vehicle_list = world.get_actors().filter('vehicle.*')
+# for vehicle in vehicle_list:
+#     # Set the texture color
+#     new_color = carla.Color(255,0,0)
+#     # vehicle.set_color(new_color)
+#     vehicle.set_attribute('color', new_color.rgba)
+
+print('done')
