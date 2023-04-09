@@ -50,7 +50,6 @@ blueprint_library = world.get_blueprint_library()
 vehicle_bp = blueprint_library.find('vehicle.ford.ambulance')
 
 # Spawn the vehicle
-# vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 for i, spawn_point in enumerate(spawn_points[0:100]):
     vehicle = world.spawn_actor(vehicle_bp, spawn_point)
 
@@ -61,7 +60,9 @@ for i, spawn_point in enumerate(spawn_points[0:100]):
     print(f'Spawned vehicle {vehicle.id}')
 
 all_objects = list(world.get_names_of_all_objects())
+print(all_objects)
 ambulances = [k for k in all_objects if 'BP_Ambulance' in k]
+parked_vehicles = [k for k in all_objects if 'Vh_Car_' in k]
 # print(filter_objects)
 # Load image texture
 from PIL import Image
@@ -87,8 +88,8 @@ for x in range(0,width):
     # world.apply_color_texture_to_object(ambulance, carla.MaterialParameter.Diffuse, texture)
 # Apply texture to all objects
 from tqdm import tqdm
-for my_object in tqdm(all_objects):
-    world.apply_color_texture_to_object(my_object, carla.MaterialParameter.Diffuse, texture)
+# for my_object in tqdm(parked_vehicles):
+#     world.apply_color_texture_to_object(my_object, carla.MaterialParameter.Diffuse, texture)
 
 # # Retrieve the first vehicle in the world
 # vehicle_list = world.get_actors().filter('vehicle.*')
