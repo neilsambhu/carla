@@ -1,3 +1,21 @@
+#!/usr/bin/env python
+# ==============================================================================
+# -- find carla module ---------------------------------------------------------
+# ==============================================================================
+import glob
+import os
+import sys
+try:
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+        sys.version_info.major,
+        sys.version_info.minor,
+        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+except IndexError:
+    pass
+
+# ==============================================================================
+# -- imports -------------------------------------------------------------------
+# ==============================================================================
 import carla
 import subprocess, time, os, random
 
@@ -12,7 +30,7 @@ kill_carla_podman()
 
 # 4/1/2023 7:57:17 PM: launch simulator: start
 cmd = f'xhost local:root && podman run --privileged --net=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.13 /bin/bash ./CarlaUE4.sh'
-server_process = subprocess.Popen(cmd, shell=True, preexec_fn=os.setsid)
+#server_process = subprocess.Popen(cmd, shell=True, preexec_fn=os.setsid)
 time.sleep(10)
 # 4/1/2023 7:57:17 PM: launch simulator: end
 
