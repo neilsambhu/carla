@@ -247,7 +247,9 @@ class World(object):
         blueprint.set_attribute('role_name', self.actor_role_name)
         # 8/18/2023 6:35:42 PM: debug color: start
         # if blueprint.has_attribute('color'):
+        #     # print(blueprint.get_attribute('color').recommended_values)
         #     color = random.choice(blueprint.get_attribute('color').recommended_values)
+        #     # print(color)
         #     blueprint.set_attribute('color', color)
         # 8/18/2023 6:35:42 PM: debug color: end
         if blueprint.has_attribute('driver_id'):
